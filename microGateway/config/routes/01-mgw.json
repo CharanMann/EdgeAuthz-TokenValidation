@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "introspectOAuth2Endpoint": "http://mstokval.example.com:19090"
+  },
+  "capture": "all",
+  "name": "mgw",
+  "baseURI": "http://igApp651.example.com:8081",
+  "condition": "${matches(request.uri.path, '^/home/mgw')}",
+  "handler": {
+    "type": "Chain",
+    "config": {
+      "filters": [
+        {
+          "name": "OAuth2ResourceServerFilter-1",
+          "type": "OAuth2ResourceServerFilter",
+          "config": {
+            "requireHttps": false,
+            "accessTokenResolver": {
+              "name": "TokenIntrospectionAccessTokenResolver-1",
+              "type": "TokenIntrospectionAccessTokenResolver",
+              "config": {
+                "endpoint": "&{introspectOAuth2Endpoint}/introspect",
+                "providerHandler": "ForgeRockClientHandler"
+              }
+            },
+            "scopes": ["microservice-A"]
+          }
+        }
+      ],
+      "handler": "ReverseProxyHandler"
+    }
+  }
+}

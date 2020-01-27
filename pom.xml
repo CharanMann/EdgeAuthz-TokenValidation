@@ -27,13 +27,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.forgerock.openig</groupId>
-    <artifactId>IG-Examples</artifactId>
+    <artifactId>EdgeAuthz-TokenValidation</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>IG-Examples</name>
 
     <properties>
-        <openig.version>5.5.0</openig.version>
+        <openig.version>6.5.0</openig.version>
         <commons.version>21.0.0</commons.version>
     </properties>
 
@@ -62,13 +62,6 @@
             <groupId>org.forgerock.commons</groupId>
             <artifactId>json-resource-http</artifactId>
             <version>${commons.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.0</version>
         </dependency>
 
     </dependencies>

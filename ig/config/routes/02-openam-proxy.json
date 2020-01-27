@@ -1,5 +1,0 @@
-{
-  "baseURI": "http://lb.example.com:7000",
-  "handler": "ClientHandler",
-  "condition": "${matches(request.uri.path, '^/openam')}"
-}

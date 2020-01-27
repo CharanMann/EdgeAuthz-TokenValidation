@@ -1,4 +1,4 @@
-# IG-Examples 
+# EdgeAuthz-TokenValidation
 
 Various IG Examples <br />
 

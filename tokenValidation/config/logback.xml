@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2019 ForgeRock AS. All Rights Reserved
+  ~
+  ~ Use of this code requires a commercial software license with ForgeRock AS.
+  ~ or with one of its affiliates. All use shall be exclusively subject
+  ~ to such license between the licensee and ForgeRock AS.
+  -->
+
+<configuration scan="true" scanPeriod="10 seconds">
+
+  <!-- Allow configuration of JUL loggers within this file, without performance impact -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" />
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%nopex[%thread] %highlight(%-5level) %boldWhite(%logger{35}) - %message%n%highlight(%rootException{short})</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Create a separate log file for each <key> -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${instance.dir}/logs/token-validation.log</file>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <!-- Rotate files daily -->
+      <fileNamePattern>${instance.dir}/logs/token-validation-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+      <!-- each file should be at most 100MB, keep 30 days worth of history, but at most 3GB -->
+      <maxFileSize>100MB</maxFileSize>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>3GB</totalSizeCap>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%date{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC} | %-5level | %thread | %logger{20} | %message%n%xException</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Disable logs of exceptions attached to responses by defining 'level' to OFF -->
+  <logger name="org.forgerock.openig.filter.LogAttachedExceptionFilter" level="INHERITED" />
+
+  <root level="${ROOT_LOG_LEVEL:-INFO}">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+  </root>
+</configuration>
