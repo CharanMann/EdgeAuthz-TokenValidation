@@ -2,10 +2,9 @@
   "properties": {
     "openAmOAuth2Endpoint": "http://am651.example.com:8086/am/oauth2/employees"
   },
-  "heap": [
-    {
+  "introspectionConfig": {
+    "accessTokenResolver": {
       "type": "StatelessAccessTokenResolver",
-      "name": "DelegatedSATR",
       "config": {
         "issuer": "&{openAmOAuth2Endpoint}",
         "secretsProvider": {
@@ -15,21 +14,6 @@
           }
         },
         "verificationSecretId": "stateless.access.token.verification.key"
-      }
-    }
-  ],
-  "introspectionConfig": {
-    "accessTokenResolver": {
-      "type": "ScriptableAccessTokenResolver",
-      "config": {
-        "type": "application/x-groovy",
-        "source": [
-          "logger.info('Validating token from Redis cache\"' + token + '\"')",
-          "return delegate.resolve(context, token)"
-        ],
-        "args": {
-          "delegate": "${heap['DelegatedSATR']}"
-        }
       }
     }
   }
