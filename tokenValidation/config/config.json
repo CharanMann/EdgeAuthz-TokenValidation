@@ -5,7 +5,7 @@
   "heap": [
     {
       "type": "StatelessAccessTokenResolver",
-      "name": "DelegatedSATR",
+      "name": "StatelessAccessTokenResolver",
       "config": {
         "issuer": "&{openAmOAuth2Endpoint}",
         "secretsProvider": {
@@ -23,12 +23,11 @@
       "type": "ScriptableAccessTokenResolver",
       "config": {
         "type": "application/x-groovy",
-        "source": [
-          "logger.info('Validating token from Redis cache\"' + token + '\"')",
-          "return delegate.resolve(context, token)"
-        ],
+        "file": "SharedCacheChecker.groovy",
         "args": {
-          "delegate": "${heap['DelegatedSATR']}"
+          "cacheEndpoint": "redis://127.0.0.1:6379",
+          "cacheSet": "tokenSet",
+          "delegate": "${heap['StatelessAccessTokenResolver']}"
         }
       }
     }

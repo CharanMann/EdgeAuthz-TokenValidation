@@ -23,7 +23,9 @@
                 "providerHandler": "ForgeRockClientHandler"
               }
             },
-            "scopes": ["microservice-A"]
+            "scopes": [
+              "microservice-A"
+            ]
           }
         }
       ],
