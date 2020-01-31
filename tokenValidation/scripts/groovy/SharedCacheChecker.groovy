@@ -68,8 +68,12 @@ RSetCache redisSet = getSetCache()
 logger.info("Checking ${token} in redis cache")
 
 if (redisSet.contains(token)) {
+
+    logger.info("Blacklisted token found in redis cache")
     validationFailure()
 } else {
+
+    logger.info("Blacklisted token not found in redis cache, proceeding with StatelessAccessTokenResolver")
     invokeDelegate()
 }
 
