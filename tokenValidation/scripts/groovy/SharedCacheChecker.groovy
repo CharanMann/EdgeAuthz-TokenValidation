@@ -22,9 +22,13 @@
  * This script requires these arguments: cacheEndpoint, cacheSet, delegate
  */
 
+
 @Grab(group='org.redisson', module='redisson', version='3.12.0')
+
+import groovy.json.JsonSlurper
 import org.forgerock.http.protocol.Response
 import org.forgerock.http.protocol.Status
+import org.redisson.Redisson
 import org.redisson.api.RSetCache
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
@@ -36,7 +40,7 @@ def getSetCache() {
     Config config = new Config()
     config.useSingleServer().setAddress(cacheEndpoint)
 
-    RedissonClient redissonClient = org.redisson.Redisson.create()
+    RedissonClient redissonClient = Redisson.create()
 
     logger.info("Retrieving Redis cache set: ${cacheSet}")
     redissonClient.getSetCache(cacheSet)
@@ -62,14 +66,29 @@ def invokeDelegate() {
     return delegate.resolve(context, token)
 }
 
+
 RSetCache redisSet = getSetCache()
 
 // If there is an object in blacklisted cache, then return error
-logger.info("Checking ${token} in redis cache")
+logger.info("Processing token: ${token}")
 
-if (redisSet.contains(token)) {
+String cachekey
+if (token) {
 
-    logger.info("Blacklisted token found in redis cache")
+    // Retrieve JWT body and base64 decode
+    def decodedBody = new String((token.tokenize(".")[1]).decodeBase64())
+    JsonSlurper jsonSlurper = new JsonSlurper()
+    def jwtBody = jsonSlurper.parseText(decodedBody)
+    logger.info("Decoded JwT body: ${jwtBody}")
+
+    // Retrieve JTI field from JWT
+    cachekey = jwtBody.get("jti")
+    logger.info("Checking for key: ${cachekey} in redis cache")
+}
+
+if (cachekey && redisSet.contains(cachekey)) {
+
+    logger.info("Blacklisted token found in redis cache. This token has been revoked.")
     validationFailure()
 } else {
 
