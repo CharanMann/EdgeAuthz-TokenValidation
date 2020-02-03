@@ -30,8 +30,8 @@ public class RedisTest {
 
         RSetCache<String> rSetCache = redissonClient.getSetCache("tokenSet");
 
-        // Add blacklist JTI
-        rSetCache.add("9weTPYuAfVzYcMIaHisMMxacJog.-bQ3drRRGrb2xyGuO_uljHxDM0g");
+        // Add blacklist authGrantId
+        rSetCache.add("LZmUJtEx1XhE0tKtCb5t3JYl79c.Y6uFkeDcKmC38kiVOGzf0HClZjc");
 
         redissonClient.shutdown();
     }

@@ -1,0 +1,5 @@
+{
+  "baseURI": "${frConfigs.amUrl}",
+  "handler": "ClientHandler",
+  "condition": "${matches(request.uri.path, '^/am') and not contains(request.uri.path, 'token/revoke') }"
+}

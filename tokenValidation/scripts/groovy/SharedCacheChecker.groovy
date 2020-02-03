@@ -87,8 +87,8 @@ if (token) {
     def jwtBody = jsonSlurper.parseText(decodedBody)
     logger.info("Decoded JwT body: ${jwtBody}")
 
-    // Retrieve JTI field from JWT
-    cachekey = jwtBody["jti"]
+    // Retrieve authGrantId field from JWT
+    cachekey = jwtBody["authGrantId"]
     logger.info("Checking for key: ${cachekey} in redis cache")
 }
 
