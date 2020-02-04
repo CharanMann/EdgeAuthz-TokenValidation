@@ -17,9 +17,9 @@
  */
 
 /*
- * Groovy script for checking shared cache for token revocations
+ * Groovy script for updating shared cache with token revocations
  *
- * This script requires these arguments: cacheEndpoint, cacheSet, delegate
+ * This script requires these arguments: cacheEndpoint, cacheSet
  */
 
 @Grab(group = 'org.redisson', module = 'redisson', version = '3.12.0')
@@ -58,11 +58,11 @@ def validationFailure() {
 }
 
 /**
- * Invoke delegate
+ * Invoke next handler
  */
-def invokeDelegate() {
-    // Call delegate.
-    return delegate.resolve(context, token)
+def invokeNextHandler() {
+    // Call the next handler. This returns when the request has been handled.
+    return next.handle(context, request)
 }
 
 logger.info("Processing token: ${token}")
@@ -99,7 +99,7 @@ if (cachekey && redisSet.contains(cachekey)) {
 } else {
 
     logger.info("Blacklisted token not found in redis cache, proceeding with StatelessAccessTokenResolver")
-    invokeDelegate()
+    invokeNextHandler()
 }
 
 
