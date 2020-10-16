@@ -24,7 +24,7 @@ public class RedisTest {
 
     public static void main(String[] args) {
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://192.168.56.132:6379");
+        config.useSingleServer().setAddress("redis://fr7-aws.example.com:6379");
 
         RedissonClient redissonClient = org.redisson.Redisson.create(config);
 

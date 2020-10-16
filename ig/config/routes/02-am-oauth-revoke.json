@@ -1,6 +1,6 @@
 {
   "baseURI": "${frConfigs.amUrl}",
-  "condition": "${matches(request.uri.path, '^/am') and not contains(request.uri.path, 'token/revoke') }",
+  "condition": "${matches(request.uri.path, '^/am') and contains(request.uri.path, 'token/revoke') }",
   "handler": {
     "type": "Chain",
     "config": {
@@ -13,9 +13,8 @@
             "type": "application/x-groovy",
             "file": "SharedCacheUpdater.groovy",
             "args": {
-              "cacheEndpoint": "redis://127.0.0.1:6379",
-              "cacheSet": "tokenSet",
-              "token": "${request.headers.token[0]}"
+              "cacheEndpoint": "${frConfigs.cacheEndpoint}",
+              "cacheSet": "tokenSet"
             }
           },
           "capture": "all"

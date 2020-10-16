@@ -86,25 +86,6 @@
       "config": {
         "numberOfWorkers": 2
       }
-    },
-    {
-      "name": "JSONAuditService",
-      "type": "AuditService",
-      "config": {
-        "config": {},
-        "event-handlers": [
-          {
-            "class": "org.forgerock.audit.handlers.json.JsonAuditEventHandler",
-            "config": {
-              "name": "json",
-              "logDirectory": "${openig.baseDirectory.path}/${frConfigs.igAuditDir}",
-              "topics": [
-                "access"
-              ]
-            }
-          }
-        ]
-      }
     }
   ]
 }

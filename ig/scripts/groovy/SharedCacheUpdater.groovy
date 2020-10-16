@@ -13,7 +13,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * EdgeAuthz-TokenValidation: Created by Charan Mann on 1/30/20 , 9:21 PM.
+ * EdgeAuthz-TokenValidation: Created by Charan Mann on 10/15/20 , 9:21 PM.
  */
 
 /*
@@ -25,14 +25,10 @@
 @Grab(group = 'org.redisson', module = 'redisson', version = '3.12.0')
 
 import groovy.json.JsonSlurper
-import org.forgerock.http.protocol.Response
-import org.forgerock.http.protocol.Status
 import org.redisson.Redisson
 import org.redisson.api.RSetCache
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
-
-import static org.forgerock.http.protocol.Response.newResponsePromise
 
 def getRedisClient() {
     //logger.info("Creating Redis cache: ${cacheEndpoint}")
@@ -46,18 +42,6 @@ def getRedisClient() {
 }
 
 /**
- * Creates validation failure error
- */
-def validationFailure() {
-    logger.info("Returning validation failure error")
-    Response validationFailureRes = new Response(Status.OK)
-    validationFailureRes.entity.json = ["active": false];
-
-    // Need to wrap the response object in a promise
-    return newResponsePromise(validationFailureRes)
-}
-
-/**
  * Invoke next handler
  */
 def invokeNextHandler() {
@@ -65,19 +49,20 @@ def invokeNextHandler() {
     return next.handle(context, request)
 }
 
+def token = request.form["token"][0]
 logger.info("Processing token: ${token}")
+
 RedissonClient redisClient = globals["${cacheEndpoint}"]
 
 // If redisClient is not present in globals, then create this object
 if (!redisClient) {
     redisClient = getRedisClient()
-    globals["${cacheEndpoint}"]= redisClient
+    globals["${cacheEndpoint}"] = redisClient
 }
 
 logger.info("Retrieving Redis cache set from Redis server: ${cacheSet}")
 RSetCache redisSet = redisClient.getSetCache(cacheSet)
 
-// If there is an object in blacklisted cache, then return failure message
 String cachekey
 if (token) {
 
@@ -89,17 +74,13 @@ if (token) {
 
     // Retrieve authGrantId field from JWT
     cachekey = jwtBody["authGrantId"]
-    logger.info("Checking for key: ${cachekey} in redis cache")
-}
-
-if (cachekey && redisSet.contains(cachekey)) {
-
-    logger.info("Blacklisted token found in redis cache. This token has been revoked.")
-    validationFailure()
+    logger.info("Adding key: ${cachekey} in redis cache")
+    redisSet.add(cachekey)
 } else {
-
-    logger.info("Blacklisted token not found in redis cache, proceeding with StatelessAccessTokenResolver")
-    invokeNextHandler()
+    // If there is no token in request, then log message and proceed to next filter
+    logger.info("No token found in the request.")
 }
+
+invokeNextHandler()
 
 
