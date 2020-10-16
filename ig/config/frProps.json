@@ -5,5 +5,5 @@
   "igAgentName": "IG7",
   "ssoCookieName": "iPlanetDirectoryPro",
   "igAuditDir": "audit",
-  "cacheEndpoint": "redis://127.0.0.1:6379"
+  "redisEndpoint": "redis://127.0.0.1:6379"
 }

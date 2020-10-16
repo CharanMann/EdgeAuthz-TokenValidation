@@ -13,7 +13,7 @@
             "type": "application/x-groovy",
             "file": "SharedCacheUpdater.groovy",
             "args": {
-              "cacheEndpoint": "${frConfigs.cacheEndpoint}",
+              "cacheEndpoint": "${frConfigs.redisEndpoint}",
               "cacheSet": "tokenSet"
             }
           },

@@ -1,10 +1,10 @@
 {
   "properties": {
-    "introspectOAuth2Endpoint": "http://mstokval.example.com:19090"
+    "introspectOAuth2Endpoint": "http://mstokval.example.com:19292"
   },
   "capture": "all",
-  "name": "mgw",
-  "baseURI": "http://igApp651.example.com:8081",
+  "name": "mgw-ms-A",
+  "baseURI": "http://ms-a.example.com:8081",
   "condition": "${matches(request.uri.path, '^/home/mgw')}",
   "handler": {
     "type": "Chain",
