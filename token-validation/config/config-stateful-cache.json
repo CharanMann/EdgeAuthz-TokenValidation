@@ -1,6 +1,6 @@
 {
   "properties": {
-    "openAmOAuth2Endpoint": "http://am7.example.com:8086/am/oauth2/customers",
+    "openAmOAuth2Endpoint": "http://am-ig7.example.com:9090/am/oauth2/customers",
     "oauth2ClientId": "token-validation"
   },
   "introspectionConfig": {

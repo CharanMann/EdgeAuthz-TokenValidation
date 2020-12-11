@@ -1,6 +1,0 @@
-{
-  "baseURI": "${frConfigs.amUrl}",
-  "handler": "ClientHandler",
-  "capture": "all",
-  "condition": "${matches(request.uri.path, '^/am') and contains(request.uri.path, '/access_token') }"
-}

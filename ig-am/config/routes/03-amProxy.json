@@ -1,0 +1,5 @@
+{
+  "baseURI": "${frConfigs.amUrl}",
+  "condition": "${contains(request.uri.path, '/am')}",
+  "handler": "ForgeRockClientHandler"
+}

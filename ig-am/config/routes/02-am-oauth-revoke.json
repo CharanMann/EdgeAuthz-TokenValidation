@@ -20,7 +20,7 @@
           "capture": "all"
         }
       ],
-      "handler": "ClientHandler"
+      "handler": "ForgeRockClientHandler"
     },
     "capture": "all"
   }

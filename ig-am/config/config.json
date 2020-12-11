@@ -1,0 +1,32 @@
+{
+  "handler": {
+    "name": "_router",
+    "type": "Router"
+  },
+  "properties": {
+    "frConfigs": {
+      "$location": "${fileToUrl(openig.configDirectory)}/frProps.json"
+    }
+  },
+  "secrets": {
+    "stores": [
+      {
+        "type": "FileSystemSecretStore",
+        "config": {
+          "format": "BASE64",
+          "directory": "${openig.configDirectory}/secrets"
+        }
+      }
+    ]
+  },
+  "heap": [
+    {
+      "name": "capture",
+      "type": "CaptureDecorator",
+      "config": {
+        "captureEntity": false,
+        "captureContext": false
+      }
+    }
+  ]
+}

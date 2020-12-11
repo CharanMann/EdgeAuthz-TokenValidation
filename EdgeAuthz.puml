@@ -1,0 +1,37 @@
+@startuml
+title __Edge Authorization__
+autonumber
+
+group Acquire Access token
+UI<->AM_IG: User performs authentication and acquires access token
+AM_IG<->AM: Authentication request
+AM-->AM_IG: OAuth Access token
+AM_IG-->UI: OAuth Access token
+end
+
+group Access API
+UI->IG_OAuth_RS: Access API with OAuth Access token
+IG_OAuth_RS->TV_MS: Validate Access token
+TV_MS->Cache: Check if token is blacklisted
+alt Blacklisted token
+TV_MS-->IG_OAuth_RS: Returns active:false
+IG_OAuth_RS-->UI: Returns 401 Unauthorized error
+end
+alt Valid token
+TV_MS->IG_OAuth_RS: Validates token signature
+TV_MS-->IG_OAuth_RS: Returns active:true
+IG_OAuth_RS-->UI: Returns API response
+end
+
+group Revoke OAuth token
+UI->AM_IG: User revokes token during logout operation
+AM_IG->Cache: IG adds blacklisted token to cache
+AM_IG->AM: Token revocation request
+AM->AM: Revoke OAuth token
+AM-->AM_IG: Successful revocation
+AM_IG-->UI: Successful revocation
+end
+
+end
+
+@enduml

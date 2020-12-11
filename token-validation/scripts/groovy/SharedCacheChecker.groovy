@@ -71,7 +71,7 @@ RedissonClient redisClient = globals["${cacheEndpoint}"]
 // If redisClient is not present in globals, then create this object
 if (!redisClient) {
     redisClient = getRedisClient()
-    globals["${cacheEndpoint}"]= redisClient
+    globals["${cacheEndpoint}"] = redisClient
 }
 
 logger.info("Retrieving Redis cache set from Redis server: ${cacheSet}")
