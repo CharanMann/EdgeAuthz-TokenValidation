@@ -72,6 +72,5 @@ When distributing Covered Software, include this CDDL Header Notice in each file
 legal/CDDLv1.0.txt. If applicable, add the following below the CDDL Header, with the fields enclosed by brackets []
 replaced by your own identifying information: "Portions copyright [year] [name of copyright owner]".
 
-Copyright 2018 ForgeRock AS.
+Copyright 2020 ForgeRock AS.
 
-Portions Copyrighted 2018 Charan Mann
