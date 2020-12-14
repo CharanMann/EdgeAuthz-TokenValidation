@@ -1,0 +1,321 @@
+{
+	"info": {
+		"_postman_id": "802a2380-46b1-4d46-976c-86baee4a4a39",
+		"name": "Edge Authz",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Valid token flow",
+			"item": [
+				{
+					"name": "1. Acquire Token: IG-AM",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "45881a51-1a53-4fef-9a8f-6bc0a188a95d",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.access_token);",
+									"postman.setEnvironmentVariable(\"refreshToken\", jsonData.refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "BASIC bWljcm9zZXJ2aWNlLWNsaWVudDpwYXNzd29yZA=="
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "user.823",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{tu1password}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "microservice-A",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{AM-IG7}}/oauth2/customers/access_token",
+							"host": [
+								"{{AM-IG7}}"
+							],
+							"path": [
+								"oauth2",
+								"customers",
+								"access_token"
+							]
+						},
+						"description": "OAuth2-RO Password Credentials"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Access MS-A: MicroIG",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://ms-gw-a.example.com:19090/home/mgw",
+							"protocol": "http",
+							"host": [
+								"ms-gw-a",
+								"example",
+								"com"
+							],
+							"port": "19090",
+							"path": [
+								"home",
+								"mgw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. OAuth2 Introspect: Token Validation MS",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://mstokval.example.com:19292/introspect",
+							"protocol": "http",
+							"host": [
+								"mstokval",
+								"example",
+								"com"
+							],
+							"port": "19292",
+							"path": [
+								"introspect"
+							]
+						},
+						"description": "OAuth2-Introspect"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d9715415-3218-4af6-acf1-02ccf91f3d9f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "53386377-ce8d-4c68-901d-9868b961a266",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Invalid token flow",
+			"item": [
+				{
+					"name": "1. Revoke Access token: IG-AM",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "BASIC bWljcm9zZXJ2aWNlLWNsaWVudDpwYXNzd29yZA=="
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "token",
+									"value": "{{refreshToken}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{AM-IG7}}/oauth2/customers/token/revoke",
+							"host": [
+								"{{AM-IG7}}"
+							],
+							"path": [
+								"oauth2",
+								"customers",
+								"token",
+								"revoke"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Access MS-A: MicroIG",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://ms-gw-a.example.com:19090/home/mgw",
+							"protocol": "http",
+							"host": [
+								"ms-gw-a",
+								"example",
+								"com"
+							],
+							"port": "19090",
+							"path": [
+								"home",
+								"mgw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. OAuth2 Introspect: Token Validation MS",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://mstokval.example.com:19292/introspect",
+							"protocol": "http",
+							"host": [
+								"mstokval",
+								"example",
+								"com"
+							],
+							"port": "19292",
+							"path": [
+								"introspect"
+							]
+						},
+						"description": "OAuth2-Introspect"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "94481ddf-dd91-48ab-b251-9a3fa63505ac",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "32d57a60-a346-4465-9a03-6fb7958290fe",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "8cf6b26c-9d30-41ac-b322-34dd816f16e3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "73b5082b-b9c0-4288-a6a2-b58ffcf27f12",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

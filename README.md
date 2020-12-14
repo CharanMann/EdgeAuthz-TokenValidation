@@ -18,67 +18,47 @@ action taken by you or others related to the sample code.
 
 Pre-requisites :
 ================
+* Versions used for this project: IG 7.0.1, AM 7.0.0, IG-Microgateway 1.0.2, MicroserviceTokenValidation-1.0.2
 
-* Versions used for this project: IG 5.0, AM 5.1.1
+1. Redis has been installed for shared caching service. This cache needs to be reachable from AM and MicroserviceTokenValidation
+2. AM has been installed and configured. 
 
-1. AM has been installed and configured. Example routes in this example use AM realm '/employees'.
+AM Configuration:
+=====================
+1. Create realm /customers and enable OAuth Provider
+2. Create OAuth clients: microservice-client
+3. Add microservice-A scope to this client
+4. Enable appropriate grant types such as ROPC, refresh token etc 
 
 IG Configuration:
 =====================
+1. Install IG
+2. Leverage configs under /ig-am for this deployment
+3. Start server: ig/bin/start.sh ~/forgerock/ig-am/
 
-1.
+IG-Microgateway Configuration:
+=====================
+1. Install IG-Microgateway
+2. Leverage configs under /micro-gateway for this deployment
+3. Start server: mig1/bin/start.sh ~/forgerock/micro-gateway/
+4. Deploy IG sample application as test backend application
+5. For more details, refer https://backstage.forgerock.com/docs/mg/1/user-guide/#chap-using 
 
-IG Examples testing:
+MicroserviceTokenValidation Configuration:
+=====================
+1. Install MicroserviceTokenValidation
+2. Leverage configs under /token-validation for this deployment
+3. Start server: tvms1/bin/start.sh ~/forgerock/token-validation/
+4. For more details, refer https://backstage.forgerock.com/docs/mg/1/user-guide/#chap-using
+   
+
+Testing:
 =========================
+* Refer ![ScreenShot](./diagrams/EdgeAuthzSequence.png) for complete flow
+* Refer postmanCollection/Edge Authz.postman_collection.json for postman collection:
+   - Valid token flow 
+   - Invalid token flow  
 
-1. IG as SP with ADFS as IdP:
-    * Enabled Route(s): 10-adfs-docapp.json
-    * ADFS configuration: Check ADFS folder
-    * Test1: Initiate SAML
-      flow: https://docapp-ig.example.net:8443/saml/SPInitiatedSSO?RelayState=${urlEncodeQueryParameterNameOrValue(contexts.router.originalUri)}&binding=HTTP-POST&NameIDFormat=transient
-2. IG split():
-    * Enabled Route(s): 20-split.json
-    * Test1: http://ig5.example.com:9000/splitTest/t1/t2/t3. Nothing returned in property splitting due
-      to [OPENIG-1999](https://bugster.forgerock.org/jira/browse/OPENIG-1999)
-3. Throttle:
-    * Enabled Route(s): 30-tx-throttle.json
-    * Test:
-    ```
-    $ curl -v -s -I -L -H 'action: throttle' http://ig5.example.com:9000/history/emp1/\[01-10000\] > throttleTest.txt 2>&1
-    $ grep "< HTTP/1.1" throttleTest.txt | sort | uniq -c
-      6 < HTTP/1.1 404 Not Found
-    9994 < HTTP/1.1 429 Too Many Requests
-    ```
-4. OIDC RP:
-    * Enabled Route(s): 30-tx-throttle.json
-    * Test: http://ig55.example.com:9292/home/id_token
-5. OpenIG-OpenAM PEP for REST APIs
-    * Enabled Route(s): 06-pep-apis.json
-    * Disabled Route(s): None
-    * Test1: Get TxHistory for all users: curl -X GET -H "X-OpenAM-Username: empAdmin" -H "X-OpenAM-Password:
-      Passw0rd" "http://apis-ig.example.net:9002/txHistory/all". Result: Should return transaction history for all users
-    * Test2: Get TxHistory for all users using unauthorized account: curl -X GET -H "X-OpenAM-Username: emp1" -H "
-      X-OpenAM-Password: Passw0rd" "http://apis-ig.example.net:9002/txHistory/all". Result: Should return authorization
-      failed.
-6. OpenIG-OAuth2 RS:
-    * Enabled Route(s): 10-oauth2rs-apis.json
-    * Disabled Route(s): None
-    * Test1: Acquire OAuth Access token by using OAuth Resource Owner Password Credentials flow : curl -X POST -H "
-      Authorization: BASIC ZW1wbG95ZWVBcHA6cGFzc3dvcmQ=" -H "Content-Type: application/x-www-form-urlencoded" -d '
-      grant_type=password&username=emp1&password=Passw0rd&scope=uid
-      mail' "http://openam.example.com:18080/openam/oauth2/employees/access_token" <br />
-      Get TxHistory for specified user: curl -X GET -H "Authorization: Bearer
-      a04b0596-9ed7-4e7e-bd36-4008d901bcd2" "http://apis-ig.example.net:9002/history/emp1". Result: Should return
-      transaction history for specified user.
-    * Test2: Get TxHistory for specified user using invalid OAuth Access token: curl -X GET -H "Authorization: Bearer
-      a04b0596-9ed7-4e7e-bd36-qqqqqqqq" "http://apis-ig.example.net:9002/history/emp1" -v. Result: Should return
-      error: "The access token provided is expired, revoked, malformed, or invalid for other reasons.".
-7. isTokenValid AM legacy:
-    * Enabled Route(s): 20-am-isTokenValid.json
-    * Disabled Route(s): None
-    * Test1: Legacy call with valid SSO token : curl -X POST http://ig55.example.com:9292/openam/identity/isTokenValid
-      -H 'Content-Type: application/x-www-form-urlencoded' -d 'tokenid=<SSOTokenId>'. <br />
-      boolean=true
 
 * * *
 
