@@ -22,6 +22,7 @@ TV_MS->IG_OAuth_RS: Validates token signature
 TV_MS-->IG_OAuth_RS: Returns active:true
 IG_OAuth_RS-->UI: Returns API response
 end
+end
 
 group Revoke OAuth token
 UI->AM_IG: User revokes token during logout operation
@@ -30,8 +31,6 @@ AM_IG->AM: Token revocation request
 AM->AM: Revoke OAuth token
 AM-->AM_IG: Successful revocation
 AM_IG-->UI: Successful revocation
-end
-
 end
 
 @enduml
