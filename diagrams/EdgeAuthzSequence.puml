@@ -26,11 +26,17 @@ end
 
 group Revoke OAuth token
 UI->AM_IG: User revokes token during logout operation
-AM_IG->Cache: IG adds blacklisted token to cache
 AM_IG->AM: Token revocation request
 AM->AM: Revoke OAuth token
+alt Token revoked successfully
+AM_IG->Cache: IG adds blacklisted token to cache
 AM-->AM_IG: Successful revocation
 AM_IG-->UI: Successful revocation
+end
+alt Token revocation failed
+AM-->AM_IG: Revocation failure
+AM_IG-->UI: Revocation failure
+end
 end
 
 @enduml

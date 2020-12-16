@@ -6,16 +6,38 @@
     "config": {
       "filters": [
         {
-          "comment": "Scripted filter for updating Redis cache",
-          "name": "Shared cache updater",
-          "type": "ScriptableFilter",
+          "name": "Revoked token response check",
+          "type": "SwitchFilter",
           "config": {
-            "type": "application/x-groovy",
-            "file": "SharedCacheUpdater.groovy",
-            "args": {
-              "cacheEndpoint": "${frConfigs.redisEndpoint}",
-              "cacheSet": "tokenSet"
-            }
+            "onResponse": [
+              {
+                "condition": "${response.status.code == 200}",
+                "handler": {
+                  "name": "Shared Cache Chain",
+                  "type": "Chain",
+                  "config": {
+                    "filters": [
+                      {
+                        "comment": "Scripted filter for updating Redis cache",
+                        "name": "Shared cache updater",
+                        "type": "ScriptableFilter",
+                        "config": {
+                          "type": "application/x-groovy",
+                          "file": "SharedCacheUpdater.groovy",
+                          "args": {
+                            "cacheEndpoint": "${frConfigs.redisEndpoint}",
+                            "cacheSet": "tokenSet"
+                          }
+                        },
+                        "capture": "all"
+                      }
+                    ],
+                    "handler": "ReverseProxyHandler"
+                  }
+                },
+                "capture": "all"
+              }
+            ]
           },
           "capture": "all"
         }
