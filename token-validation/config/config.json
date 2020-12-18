@@ -28,7 +28,7 @@
         "file": "SharedCacheChecker.groovy",
         "args": {
           "cacheEndpoint": "&{redisEndpoint}",
-          "cacheSet": "tokenSet",
+          "cacheMap": "tokenMap",
           "delegate": "${heap['StatelessAccessTokenResolver']}"
         }
       }

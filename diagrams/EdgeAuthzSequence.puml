@@ -17,10 +17,16 @@ alt Blacklisted token
 TV_MS-->IG_OAuth_RS: Returns active:false
 IG_OAuth_RS-->UI: Returns 401 Unauthorized error
 end
+alt Token not in blacklist cache
+TV_MS->TV_MS: Validates token signature and expiry
+alt Invalid token
+TV_MS-->IG_OAuth_RS: Returns active:false
+IG_OAuth_RS-->UI: Returns 401 Unauthorized error
+end
 alt Valid token
-TV_MS->IG_OAuth_RS: Validates token signature
 TV_MS-->IG_OAuth_RS: Returns active:true
 IG_OAuth_RS-->UI: Returns API response
+end
 end
 end
 

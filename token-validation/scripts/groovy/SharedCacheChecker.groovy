@@ -19,7 +19,7 @@
 /*
  * Groovy script for checking shared cache for token revocations
  *
- * This script requires these arguments: cacheEndpoint, cacheSet, delegate
+ * This script requires these arguments: cacheEndpoint, cacheMap, delegate
  */
 
 @Grab(group = 'org.redisson', module = 'redisson', version = '3.12.0')
@@ -28,7 +28,7 @@ import groovy.json.JsonSlurper
 import org.forgerock.http.protocol.Response
 import org.forgerock.http.protocol.Status
 import org.redisson.Redisson
-import org.redisson.api.RSetCache
+import org.redisson.api.RMapCache
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
 
@@ -74,8 +74,8 @@ if (!redisClient) {
     globals["${cacheEndpoint}"] = redisClient
 }
 
-logger.info("Retrieving Redis cache set from Redis server: ${cacheSet}")
-RSetCache redisSet = redisClient.getSetCache(cacheSet)
+logger.info("Retrieving Redis cache map from Redis server: ${cacheMap}")
+RMapCache redisMap = redisClient.getMapCache(cacheMap)
 
 // If there is an object in blacklisted cache, then return failure message
 String cachekey
@@ -92,7 +92,7 @@ if (token) {
     logger.info("Checking for key: ${cachekey} in redis cache")
 }
 
-if (cachekey && redisSet.contains(cachekey)) {
+if (cachekey && redisMap.get(cachekey)) {
 
     logger.info("Blacklisted token found in redis cache. This token has been revoked.")
     validationFailure()

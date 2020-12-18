@@ -26,20 +26,22 @@ Pre-requisites :
 AM Configuration:
 =====================
 1. Create realm /customers and enable OAuth Provider
-2. Create OAuth clients: microservice-client
-3. Add microservice-A scope to this client
-4. Enable appropriate grant types such as ROPC, refresh token etc 
+2. Enable Client-Based OAuth 2.0 tokens for this provider
+3. Create OAuth clients: microservice-client
+4. Add microservice-A scope to this client
+5. Enable appropriate grant types such as ROPC, refresh token etc 
 
 IG Configuration:
 =====================
 1. Install IG
-2. Leverage configs under /ig-am for this deployment
-3. Start server: ig/bin/start.sh ~/forgerock/ig-am/
+2. Leverage configs under /ig-am for this deployment, update these configs as needed. 
+3. Configure ttl in ig-am/config/routes/02-am-oauth-revoke.json route. This value defines token expiry in cache. Its recommended to configure this value same as Refresh Token Lifetime in AM's OAuth2 provider.    
+4. Start server: ig/bin/start.sh ~/forgerock/ig-am/
 
 IG-Microgateway Configuration:
 =====================
 1. Install IG-Microgateway
-2. Leverage configs under /micro-gateway for this deployment
+2. Leverage configs under /micro-gateway for this deployment, update these configs as needed.
 3. Start server: mig1/bin/start.sh ~/forgerock/micro-gateway/
 4. Deploy IG sample application as test backend application
 5. For more details, refer https://backstage.forgerock.com/docs/mg/1/user-guide/#chap-using 
@@ -47,7 +49,7 @@ IG-Microgateway Configuration:
 MicroserviceTokenValidation Configuration:
 =====================
 1. Install MicroserviceTokenValidation
-2. Leverage configs under /token-validation for this deployment
+2. Leverage configs under /token-validation for this deployment, update these configs as needed.
 3. Start server: tvms1/bin/start.sh ~/forgerock/token-validation/
 4. For more details, refer https://backstage.forgerock.com/docs/mg/1/user-guide/#chap-using
    

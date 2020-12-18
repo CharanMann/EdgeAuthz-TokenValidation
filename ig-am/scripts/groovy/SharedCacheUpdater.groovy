@@ -19,16 +19,18 @@
 /*
  * Groovy script for updating shared cache with token revocations
  *
- * This script requires these arguments: cacheEndpoint, cacheSet
+ * This script requires these arguments: cacheEndpoint, cacheMap, ttl
  */
 
 @Grab(group = 'org.redisson', module = 'redisson', version = '3.12.0')
 
 import groovy.json.JsonSlurper
 import org.redisson.Redisson
-import org.redisson.api.RSetCache
+import org.redisson.api.RMapCache
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
+
+import java.util.concurrent.TimeUnit
 
 def getRedisClient() {
     //logger.info("Creating Redis cache: ${cacheEndpoint}")
@@ -60,8 +62,8 @@ if (!redisClient) {
     globals["${cacheEndpoint}"] = redisClient
 }
 
-logger.info("Retrieving Redis cache set from Redis server: ${cacheSet}")
-RSetCache redisSet = redisClient.getSetCache(cacheSet)
+logger.info("Retrieving Redis cache map from Redis server: ${cacheMap}")
+RMapCache redisMap = redisClient.getMapCache(cacheMap)
 
 String cachekey
 if (token) {
@@ -75,7 +77,7 @@ if (token) {
     // Retrieve authGrantId field from JWT
     cachekey = jwtBody["authGrantId"]
     logger.info("Adding key: ${cachekey} in redis cache")
-    redisSet.add(cachekey)
+    redisMap.put(cachekey, token, ttl, TimeUnit.SECONDS)
 } else {
     // If there is no token in request, then log message and proceed to next filter
     logger.info("No token found in the request.")

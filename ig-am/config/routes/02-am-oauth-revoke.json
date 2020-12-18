@@ -26,7 +26,8 @@
                           "file": "SharedCacheUpdater.groovy",
                           "args": {
                             "cacheEndpoint": "${frConfigs.redisEndpoint}",
-                            "cacheSet": "tokenSet"
+                            "cacheMap": "tokenMap",
+                            "ttl": 604800
                           }
                         },
                         "capture": "all"
