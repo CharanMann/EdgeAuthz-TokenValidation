@@ -74,10 +74,10 @@ if (!redisClient) {
     globals["${cacheEndpoint}"] = redisClient
 }
 
-logger.info("Retrieving Redis cache map from Redis server: ${cacheMap}")
+logger.info("Retrieving denylist cache map from Redis server: ${cacheMap}")
 RMapCache redisMap = redisClient.getMapCache(cacheMap)
 
-// If there is an object in blacklisted cache, then return failure message
+// If there is an object in denylist cache, then return failure message
 String cachekey
 if (token) {
 
@@ -89,16 +89,16 @@ if (token) {
 
     // Retrieve authGrantId field from JWT
     cachekey = jwtBody["authGrantId"]
-    logger.info("Checking for key: ${cachekey} in redis cache")
+    logger.info("Checking for key: ${cachekey} in denylist cache")
 }
 
 if (cachekey && redisMap.get(cachekey)) {
 
-    logger.info("Blacklisted token found in redis cache. This token has been revoked.")
+    logger.info("Token found in denylist cache. This token has been revoked.")
     validationFailure()
 } else {
 
-    logger.info("Blacklisted token not found in redis cache, proceeding with StatelessAccessTokenResolver")
+    logger.info("Token not found in denylist cache, proceeding with StatelessAccessTokenResolver")
     invokeDelegate()
 }
 
