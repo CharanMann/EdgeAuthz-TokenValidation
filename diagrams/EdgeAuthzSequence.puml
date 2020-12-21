@@ -12,12 +12,12 @@ end
 group Access API
 UI->IG_OAuth_RS: Access API with OAuth Access token
 IG_OAuth_RS->TV_MS: Validate Access token
-TV_MS->Cache: Check if token is denylist
+TV_MS->Cache: Check if token is Denylist Cache
 alt Revoked token
 TV_MS-->IG_OAuth_RS: Returns active:false
 IG_OAuth_RS-->UI: Returns 401 Unauthorized error
 end
-alt Token not in denylist cache
+alt Token not in Denylist Cache
 TV_MS->TV_MS: Validates token signature and expiry
 alt Invalid token
 TV_MS-->IG_OAuth_RS: Returns active:false

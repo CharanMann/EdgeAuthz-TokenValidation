@@ -62,7 +62,7 @@ if (!redisClient) {
     globals["${cacheEndpoint}"] = redisClient
 }
 
-logger.info("Retrieving denylist cache map from Redis server: ${cacheMap}")
+logger.info("Retrieving Denylist Cache map from Redis server: ${cacheMap}")
 RMapCache redisMap = redisClient.getMapCache(cacheMap)
 
 String cachekey
@@ -76,7 +76,7 @@ if (token) {
 
     // Retrieve authGrantId field from JWT
     cachekey = jwtBody["authGrantId"]
-    logger.info("Adding key: ${cachekey} in denylist cache")
+    logger.info("Adding key: ${cachekey} in Denylist Cache")
     redisMap.put(cachekey, token, ttl, TimeUnit.SECONDS)
 } else {
     // If there is no token in request, then log message and proceed to next filter

@@ -1,6 +1,6 @@
 # EdgeAuthz-TokenValidation
 
-A shared denylist cache solution for securely and efficiently decoupling microservices from OAuth Authorization server. <br />
+A Såhared Denylist Cache solution for securely and efficiently decoupling microservices from OAuth Authorization server. <br />
 
 Disclaimer of Liability :
 =========================
