@@ -1,7 +1,4 @@
 {
-  "properties": {
-    "introspectOAuth2Endpoint": "http://mstokval.example.com:19292"
-  },
   "capture": "all",
   "name": "mgw-ms-A",
   "baseURI": "http://ms-a.example.com:8081",
@@ -19,7 +16,7 @@
               "name": "TokenIntrospectionAccessTokenResolver-1",
               "type": "TokenIntrospectionAccessTokenResolver",
               "config": {
-                "endpoint": "&{introspectOAuth2Endpoint}/introspect",
+                "endpoint": "${frConfigs.introspectOAuth2Endpoint}",
                 "providerHandler": "ForgeRockClientHandler"
               }
             },

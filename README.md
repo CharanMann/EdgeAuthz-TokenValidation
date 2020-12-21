@@ -18,7 +18,7 @@ action taken by you or others related to the sample code.
 
 Pre-requisites :
 ================
-* Versions used for this project: IG 7.0.1, AM 7.0.0, IG-Microgateway 1.0.2, MicroserviceTokenValidation-1.0.2
+* Versions used for this project: IG 7.0.1, AM 7.0.0, MicroserviceTokenValidation-1.0.2
 
 1. Redis has been installed for shared caching service. This cache needs to be reachable from AM and MicroserviceTokenValidation
 2. AM has been installed and configured. 
@@ -31,18 +31,18 @@ AM Configuration:
 4. Add microservice-A scope to this client
 5. Enable appropriate grant types such as ROPC, refresh token etc 
 
-IG Configuration:
+IG (Acting as AM Reverse Proxy) Configuration:
 =====================
 1. Install IG
 2. Leverage configs under /ig-am for this deployment, update these configs as needed. 
 3. Configure ttl in ig-am/config/routes/02-am-oauth-revoke.json route. This value defines token expiry in cache. Its recommended to configure this value same as Refresh Token Lifetime in AM's OAuth2 provider.    
 4. Start server: ig/bin/start.sh ~/forgerock/ig-am/
 
-IG-Microgateway Configuration:
+IG (Acting as MicroGateway) Configuration:
 =====================
-1. Install IG-Microgateway
-2. Leverage configs under /micro-gateway for this deployment, update these configs as needed.
-3. Start server: mig1/bin/start.sh ~/forgerock/micro-gateway/
+1. Install IG
+2. Leverage configs under /ig-mg for this deployment, update these configs as needed.
+3. Start server: ig/bin/start.sh ~/forgerock/ig-mg/
 4. Deploy IG sample application as test backend application
 5. For more details, refer https://backstage.forgerock.com/docs/mg/1/user-guide/#chap-using 
 

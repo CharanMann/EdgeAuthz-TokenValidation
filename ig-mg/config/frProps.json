@@ -1,0 +1,3 @@
+{
+  "introspectOAuth2Endpoint": "http://mstokval.example.com:19292/introspect"
+}

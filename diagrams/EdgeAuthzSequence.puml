@@ -3,45 +3,45 @@ title __Edge Authorization__
 autonumber
 
 group Acquire Access token
-UI<->AM_IG: User performs authentication and acquires access token
-AM_IG<->AM: Authentication request
-AM-->AM_IG: OAuth Access token
-AM_IG-->UI: OAuth Access token
+UI<->IG_AM: User performs authentication and acquires access token
+IG_AM<->AM: Authentication request
+AM-->IG_AM: OAuth Access token
+IG_AM-->UI: OAuth Access token
 end
 
 group Access API
-UI->IG_OAuth_RS: Access API with OAuth Access token
-IG_OAuth_RS->TV_MS: Validate Access token
+UI->IG_MG: Access API with OAuth Access token
+IG_MG->TV_MS: Validate Access token
 TV_MS->Cache: Check if token is denylist
 alt Revoked token
-TV_MS-->IG_OAuth_RS: Returns active:false
-IG_OAuth_RS-->UI: Returns 401 Unauthorized error
+TV_MS-->IG_MG: Returns active:false
+IG_MG-->UI: Returns 401 Unauthorized error
 end
 alt Token not in denylist cache
 TV_MS->TV_MS: Validates token signature and expiry
 alt Invalid token
-TV_MS-->IG_OAuth_RS: Returns active:false
-IG_OAuth_RS-->UI: Returns 401 Unauthorized error
+TV_MS-->IG_MG: Returns active:false
+IG_MG-->UI: Returns 401 Unauthorized error
 end
 alt Valid token
-TV_MS-->IG_OAuth_RS: Returns active:true
-IG_OAuth_RS-->UI: Returns API response
+TV_MS-->IG_MG: Returns active:true
+IG_MG-->UI: Returns API response
 end
 end
 end
 
 group Revoke OAuth token
-UI->AM_IG: User revokes token during logout operation
-AM_IG->AM: Token revocation request
+UI->IG_AM: User revokes token during logout operation
+IG_AM->AM: Token revocation request
 AM->AM: Revoke OAuth token
 alt Token revoked successfully
-AM_IG->Cache: IG adds this token to cache
-AM-->AM_IG: Successful revocation
-AM_IG-->UI: Successful revocation
+IG_AM->Cache: IG adds this token to cache
+AM-->IG_AM: Successful revocation
+IG_AM-->UI: Successful revocation
 end
 alt Token revocation failed
-AM-->AM_IG: Revocation failure
-AM_IG-->UI: Revocation failure
+AM-->IG_AM: Revocation failure
+IG_AM-->UI: Revocation failure
 end
 end
 
