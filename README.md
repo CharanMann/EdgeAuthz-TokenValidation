@@ -38,13 +38,12 @@ IG (Acting as AM Reverse Proxy) Configuration:
 3. Configure ttl in ig-am/config/routes/02-am-oauth-revoke.json route. This value defines token expiry in cache. Its recommended to configure this value same as Refresh Token Lifetime in AM's OAuth2 provider.    
 4. Start server: ig/bin/start.sh ~/forgerock/ig-am/
 
-IG (Acting as MicroGateway) Configuration:
+IG (Acting as OAuth-RS) Configuration:
 =====================
 1. Install IG
-2. Leverage configs under /ig-mg for this deployment, update these configs as needed.
-3. Start server: ig/bin/start.sh ~/forgerock/ig-mg/
-4. Deploy IG sample application as test backend application
-5. For more details, refer https://backstage.forgerock.com/docs/mg/1/user-guide/#chap-using 
+2. Leverage configs under /ig-oauth-rs for this deployment, update these configs as needed.
+3. Start server: ig/bin/start.sh ~/forgerock/ig-oauth-rs/
+4. For more details, refer https://backstage.forgerock.com/docs/ig/7/gateway-guide/oauth2-rs.html 
 
 MicroserviceTokenValidation Configuration:
 =====================

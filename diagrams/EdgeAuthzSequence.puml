@@ -10,22 +10,22 @@ IG_AM-->UI: OAuth Access token
 end
 
 group Access API
-UI->IG_MG: Access API with OAuth Access token
-IG_MG->TV_MS: Validate Access token
+UI->IG_OAuth_RS: Access API with OAuth Access token
+IG_OAuth_RS->TV_MS: Validate Access token
 TV_MS->Cache: Check if token is denylist
 alt Revoked token
-TV_MS-->IG_MG: Returns active:false
-IG_MG-->UI: Returns 401 Unauthorized error
+TV_MS-->IG_OAuth_RS: Returns active:false
+IG_OAuth_RS-->UI: Returns 401 Unauthorized error
 end
 alt Token not in denylist cache
 TV_MS->TV_MS: Validates token signature and expiry
 alt Invalid token
-TV_MS-->IG_MG: Returns active:false
-IG_MG-->UI: Returns 401 Unauthorized error
+TV_MS-->IG_OAuth_RS: Returns active:false
+IG_OAuth_RS-->UI: Returns 401 Unauthorized error
 end
 alt Valid token
-TV_MS-->IG_MG: Returns active:true
-IG_MG-->UI: Returns API response
+TV_MS-->IG_OAuth_RS: Returns active:true
+IG_OAuth_RS-->UI: Returns API response
 end
 end
 end

@@ -2,7 +2,7 @@
   "capture": "all",
   "name": "mgw-ms-A",
   "baseURI": "http://ms-a.example.com:8081",
-  "condition": "${matches(request.uri.path, '^/home/mgw')}",
+  "condition": "${matches(request.uri.path, '^/ms-A$')}",
   "handler": {
     "type": "Chain",
     "config": {
@@ -26,7 +26,18 @@
           }
         }
       ],
-      "handler": "ReverseProxyHandler"
+      "handler": {
+        "type": "StaticResponseHandler",
+        "config": {
+          "status": 200,
+          "headers": {
+            "Content-Type": [
+              "application/json"
+            ]
+          },
+          "entity": "{\n    \"data\": \"microservice-A response\"}"
+        }
+      }
     }
   }
 }
