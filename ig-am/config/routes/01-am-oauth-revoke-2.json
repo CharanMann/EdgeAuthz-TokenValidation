@@ -1,6 +1,6 @@
 {
   "baseURI": "${frConfigs.amUrl}",
-  "condition": "${matches(request.uri.path, '^/am') and contains(request.uri.path, 'token/revoke') }",
+  "condition": "${matches(request.uri.path, '^/am') and contains(request.uri.path, 'token/revoke') and matches(request.headers['type'][0], 'revoke2') }",
   "handler": {
     "type": "Chain",
     "config": {

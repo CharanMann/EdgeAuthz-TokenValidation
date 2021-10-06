@@ -27,6 +27,21 @@
         "captureEntity": false,
         "captureContext": false
       }
+    },
+    {
+      "comment": "Scripted filter for updating Redis cache",
+      "name": "SharedCacheUpdater",
+      "type": "ScriptableFilter",
+      "config": {
+        "type": "application/x-groovy",
+        "file": "SharedCacheUpdater.groovy",
+        "args": {
+          "cacheEndpoint": "${frConfigs.redisEndpoint}",
+          "cacheMap": "tokenMap",
+          "ttl": 604800
+        }
+      },
+      "capture": "all"
     }
   ]
 }

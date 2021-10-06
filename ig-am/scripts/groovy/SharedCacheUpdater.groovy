@@ -54,12 +54,14 @@ def invokeNextHandler() {
 def token = request.form["token"][0]
 logger.info("Processing token: ${token}")
 
-RedissonClient redisClient = globals["${cacheEndpoint}"]
-
+RedissonClient redisClient = globals["redisClient"]
 // If redisClient is not present in globals, then create this object
 if (!redisClient) {
     redisClient = getRedisClient()
-    globals["${cacheEndpoint}"] = redisClient
+    globals << ["redisClient": redisClient]
+    logger.info("No Redis client found in globals, adding shared client with key: ${globals*.key}")
+} else {
+    logger.info("Retrieved Redis client from globals: ${redisClient}")
 }
 
 logger.info("Retrieving Denylist Cache map from Redis server: ${cacheMap}")
