@@ -35,7 +35,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
-        <groovy.version>3.0.1</groovy.version>
+        <groovy.version>3.0.7</groovy.version>
         <openig.version>7.0.0</openig.version>
     </properties>
 
